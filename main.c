@@ -36,16 +36,17 @@ Written by Salvatore Maria Mobilia
 
 
 unsigned char *command_buffer;
-
+char *this_dir;
 int main()
 {
+	this_dir =  getcwd(this_dir,PATH_MAX);
 	time_t rawtime;
 	struct tm * now;
 	time ( &rawtime );
 	now = localtime ( &rawtime );
 	printf("\033[H\033[J");//clear the screen
 	printf(ANSI_COLOR_YELLOW "Sessione iniziata : %s \nDigita un comando e se posso ti aiutero' \n",asctime(now)); //time starting session yellow, cause we like it :)
-	
+	int _ls = 0;
 	while(1)
 	{
 		char *delim = ">>";
@@ -143,66 +144,13 @@ int main()
    		
    		if(!strcmp(token,"ls"))
    		{
-   			/*char *nt = strtok(newbuf, " ");
-   			struct dirent **namelist;
-   			int n;
-   			int i = 0;
-   			char **tokens = malloc(sizeof(newbuf)*numero(newbuf));
-   			while(nt != NULL)
+   			if(_ls == 0)
    			{
-   				
-   				tokens[i] = malloc(sizeof(nt)*strlen(nt));
-   				tokens[i] = nt;
-   				nt = strtok(NULL , " ");
-   				i++;
-   			}
-   			if(i > 3)
-   			{
-   				printf("too many arguments\n");
-   				continue;
-   			}
-   			if(i == 0 || i == 1)
-   			{
-   				n = scandir(".",&namelist,NULL,alphasort);
-   				continue;
-   			}
-   			else  if (i == 2)
-			{
-				
-				n = scandir(tokens[i], &namelist, NULL, alphasort);
-				continue; 
+				this_dir = cat(this_dir,"/ls");
+				_ls++;
 			}
-			if(n < 0) 
-			{
-				perror("diomio");
-				continue;
-			}
-			else
-			{
-				while (n--) 
-				{
-					struct stat buf;
-       				stat(namelist[n]->d_name, &buf);
-       				if(S_ISDIR(buf.st_mode))
-       				{
-       					printf(ANSI_COLOR_BLUE"%s\n"ANSI_COLOR_RESET,namelist[n]->d_name);
-       				}
-       				else if(buf.st_mode & S_IXUSR)
-       				{
-       					printf(ANSI_COLOR_GREEN"%s\n"ANSI_COLOR_RESET,namelist[n]->d_name);
-       				}	 
-					else
-					{
-       					printf("%s\n",namelist[n]->d_name);
-					}
-					free(namelist[n]); 
-				}
-				free(namelist);
-			}
-			usleep(1);
-			continue;*/
-			
-			system("/home/salvatore/Scrivania/MY_SHELL/ls");
+			system(this_dir);
+			continue;
    			
    		}
    		
